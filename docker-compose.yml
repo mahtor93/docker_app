@@ -1,0 +1,59 @@
+services:
+  db:
+    image: postgres:latest
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data  # Cambio en la ruta
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - app-network
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: gunicorn --bind 0.0.0.0:8000 auth_ev3.wsgi:application
+    volumes:
+      - ./auth_ev3:/app
+      - auth_ev3_volume:/app/static
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}  # Usa variables
+    depends_on:
+      - db
+    networks:
+      - app-network
+      
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - auth_ev3_volume:/app/static
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - web
+    networks:
+      - app-network
+    
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "5050:80"
+    networks:
+      - app-network
+    
+volumes:
+  postgres_volume:
+  auth_ev3_volume:
+
+networks:
+    app-network: {}
