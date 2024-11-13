@@ -1,0 +1,144 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oxanium:wght@200..800&display=swap"
+        rel="stylesheet">
+    <title>Registro</title>
+</head>
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: "Montserrat", serif;
+        background: linear-gradient(180deg, #ffffff, #cecece);
+        color: rgb(31, 31, 31);
+        width: full;
+        height: 100vh;
+    }
+
+
+    .neumorph {
+        border-radius: 86px;
+        background: #ffffff;
+        box-shadow: inset 12px 12px 24px #666666,
+            inset -12px -12px 24px #ffffff;
+    }
+
+    .neumorph-out {
+        border-radius: 86px;
+        background: linear-gradient(145deg, #ffffff, #e6e6e6);
+        box-shadow: 15px 15px 30px #666666,
+            -15px -15px 30px #ffffff;
+    }
+
+    .neumorph-input {
+        all: unset;
+        box-sizing: border-box;
+        width: 100%;
+        border-radius: 64px;
+        background: #ffffff;
+        box-shadow: inset 5px 5px 10px #6e6e6e,
+            inset -5px -5px 10px #ffffff;
+        border: 1px #cecece solid;
+        padding-left: 16px;
+    }
+
+    .wrapper {
+        width: 500px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+        font-family: "Montserrat", serif;
+        margin-right: auto;
+    }
+
+    .wrapper h1 {
+        margin-top: 32px;
+    }
+
+    .form-register {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        margin: 32px;
+        align-items: normal;
+        justify-content: center;
+    }
+
+    .form-register div {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .form-register div input {
+        height: 32px;
+        width: 256px;
+    }
+
+    .form-register .button {
+        align-self: center;
+        width: 128px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 16px;
+        border: 1px #cecece solid;
+        font-size: 16px;
+        color: rgb(31, 31, 31);
+    }
+</style>
+
+<body>
+    <div class="wrapper neumorph-out">
+        <h1>
+            Registro
+        </h1>
+        {% load custom_filters %}
+        <form action="/signup/" method="POST">
+            <div class="form-register">
+
+                <div class="form-item">
+                    <label for="id_nombre">Nombre</label>
+                    {{ form.nombre|add_class:"neumorph-input"}}
+                </div>
+                <div>
+                    <label for="id_correo">Correo</label>
+                    {{ form.correo|add_class:"neumorph-input"}}
+                </div>
+                <div>
+                    <label for="id_psw">Contraseña</label>
+                    {{ form.psw|add_class:"neumorph-input"}}
+                </div>
+                <div>
+                    <label for="id_psw2">Repetir Contraseña</label>
+                    {{ form.psw2|add_class:"neumorph-input"}}
+                    
+                </div>
+
+                <button class="button neumorph-out">
+                    Registrarse
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</body>
+
+</html>
