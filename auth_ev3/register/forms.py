@@ -14,3 +14,7 @@ class RegistroForm(forms.Form):
             self.add_error('psw2','Las contraseñas no coinciden.')
             
         return psw2
+    
+class LoginForm(forms.Form):
+    correo = forms.EmailField(label='Correo')
+    psw = forms.CharField(label='Contraseña', widget=forms.PasswordInput)

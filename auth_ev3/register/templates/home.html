@@ -1,8 +1,5 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +8,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oxanium:wght@200..800&display=swap"
         rel="stylesheet">
-    <title>Registro</title>
+    <title>Home</title>
+</head>
 
 <style>
     body {
@@ -64,8 +62,8 @@
         margin-right: auto;
     }
 
-    .wrapper h1 {
-        margin-top: 32px;
+    .wrapper h2 {
+        margin-top: 54px;
     }
 
     .form-register {
@@ -92,12 +90,12 @@
 
     .form-register .button {
         align-self: center;
-        width: 140px;
+        width: 160px;
         height: 54px;
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 16px;
+        margin: 16px 0 0 0 ;
         border: 1px #cecece solid;
         font-size: 16px;
         font-family: "Montserrat", serif;
@@ -131,49 +129,37 @@
     .errorList li {
         font-weight: bold;
     }
+
+
+
 </style>
-</head>
+
 <body>
+    <h1>Bienvenido</h1>
     <div class="wrapper neumorph-out">
-        <h1>
-            Registro
-        </h1>
-        {% load custom_filters %}
-        <form action="/register/" method="POST">
-            {% csrf_token %}
-            <div class="form-register">
+        <h2>Iniciar Sesión</h2>
+    {% load custom_filters %}
+    <form>
+        {% csrf_token %}
 
-                <div class="form-item">
-                    <label for="id_nombre">Nombre</label>
-                    {{ form.nombre|add_class:"neumorph-input"}}
-                </div>
-                <div>
-                    <label for="id_correo">Correo</label>
-                    {{ form.correo|add_class:"neumorph-input"}}
-                </div>
-                <div>
-                    <label for="id_psw">Contraseña</label>
-                    {{ form.psw|add_class:"neumorph-input"}}
-                </div>
-                <div>
-                    <label for="id_psw2">Repetir Contraseña</label>
-                    {{ form.psw2|add_class:"neumorph-input"}}
-                    <div class="errorList">
-                        {{ form.psw2.errors}}
-                    </div>
-                    
-                </div>
-
-                <button class="button neumorph">
-                    Registrarse
-                </button>
+        <div class="form-register">
+            <div>
+                <label for="id_correo">Correo</label>
+                {{ form.correo|add_class:"neumorph-input"}}
             </div>
+            <div>
+                <label for="id_psw">Contraseña</label>
+                {{ form.psw|add_class:"neumorph-input"}}
+            </div>
+            <button class="button neumorph">
+                Iniciar Sesión
+            </button>
 
-        </form>
+        </div>
+    </form>
         <div class='post-button'>
-            <p>¿Ya tienes una cuenta? <a href="{% url 'home' %}">Iniciar Sesión</a></p>
+            <p>Si no tienes una cuenta <a href="{% url 'register' %}">Registrate</a></p>
         </div>
     </div>
 </body>
-
 </html>
