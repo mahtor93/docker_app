@@ -102,6 +102,21 @@
         font-size: 16px;
         color: rgb(31, 31, 31);
     }
+    .errorList{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: red;
+        font-size: 0.9em; 
+    }
+    .errorList ul {
+        list-style: none; 
+        margin: 0;
+        padding: 16px;
+    }
+    .errorList li {
+        font-weight: bold;
+    }
 </style>
 
 <body>
@@ -110,7 +125,8 @@
             Registro
         </h1>
         {% load custom_filters %}
-        <form action="/signup/" method="POST">
+        <form action="/register/" method="POST">
+            {% csrf_token %}
             <div class="form-register">
 
                 <div class="form-item">
@@ -128,6 +144,9 @@
                 <div>
                     <label for="id_psw2">Repetir Contraseña</label>
                     {{ form.psw2|add_class:"neumorph-input"}}
+                    <div class="errorList">
+                        {{ form.psw2.errors}}
+                    </div>
                     
                 </div>
 
