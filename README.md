@@ -1,43 +1,39 @@
-# Proyecto: Nombre del Proyecto
+# Docker App
 
-## Requisitos Previos
+Este proyecto es una aplicación Docker que proporciona una configuración básica para desplegar una aplicación.
 
-Antes de comenzar, asegúrate de tener instalados los siguientes requisitos:
+## Requisitos
 
-- [Git](https://git-scm.com/)
+- Docker
+- Docker Compose
 
 ## Instalación
 
-Sigue estos pasos para instalar y configurar el proyecto:
-
-1. Clona el repositorio en tu máquina local:
+1. Clona este repositorio:
     ```sh
-    git clone https://github.com/usuario/nombre-del-proyecto.git
+    git clone https://github.com/tu_usuario/docker_app.git
+    cd docker_app
     ```
 
-2. Navega al directorio del proyecto:
+2. Construye y levanta los contenedores:
     ```sh
-    cd nombre-del-proyecto
+    docker-compose up --build
     ```
 
-3. Instala las dependencias del proyecto:
-    ```sh
-    npm install
-    ```
-    o si prefieres usar yarn:
-    ```sh
-    yarn install
-    ```
+## Uso
 
-## Configuración
+La aplicación estará disponible en `http://localhost:puerto` (reemplaza `puerto` con el puerto configurado en tu `docker-compose.yml`).
 
-1. Crea un archivo `.env` en la raíz del proyecto y configura las variables de entorno necesarias. Puedes usar el archivo `.env.example` como referencia:
-    ```sh
-    cp .env.example .env
-    ```
+## Estructura del Proyecto
 
-2. Edita el archivo `.env` y proporciona los valores necesarios para las variables de entorno.
+- `Dockerfile`: Define la imagen de Docker para la aplicación.
+- `docker-compose.yml`: Configuración de Docker Compose para levantar los servicios.
+- `src/`: Código fuente de la aplicación.
 
-## Ejecución
+## Contribuir
 
-Para iniciar el proyecto en modo de desarrollo, ejecuta el siguiente comando:
+1. Haz un fork del proyecto.
+2. Crea una nueva rama (`git checkout -b feature/nueva-funcionalidad`).
+3. Realiza tus cambios y haz commit (`git commit -am 'Agrega nueva funcionalidad'`).
+4. Sube tus cambios (`git push origin feature/nueva-funcionalidad`).
+5. Abre un Pull Request.
