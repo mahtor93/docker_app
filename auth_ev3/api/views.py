@@ -4,13 +4,14 @@ from django.contrib.auth.models import User
 # Create your views here.
 def user(request):
     try:
-        user_id = request.GET['id']
-        user = User.objects.get(id=user_id)
+        if request.method != 'GET':
+            user_id = request.GET['id']
+            user = User.objects.get(id=user_id)
 
-        if user is None:
-            return JsonResponse({'Error': "Usario no encontrado"}, status=404)
+            if user is None:
+                return JsonResponse({'Error': "Usario no encontrado"}, status=404)
         
-        return JsonResponse({'id': user.id, 'username': user.username, 'email': user.email})
+            return JsonResponse({'id': user.id, 'username': user.username, 'email': user.email})
     except Exception as e:
             print("Error "+e)
             return JsonResponse({'Error': "error del servicio"}, status=400)

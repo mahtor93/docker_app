@@ -1,6 +1,6 @@
 from django.urls import path
 
-from auth_ev3.api.views import deleteUser, user, users
+from api.views import deleteUser, user, users
 
 
 urlpatterns = [
