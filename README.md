@@ -19,6 +19,11 @@ Este proyecto es una aplicación Docker que proporciona una configuración bási
     ```sh
     docker-compose up --build
     ```
+3. Ejecuta las migraciones de la base de datos desde django:
+    ```sh
+    docker-compose exec web python manage.py makemigrations
+    docker-compose exec web python manage.py migrate
+    ```
 
 ## Uso
 

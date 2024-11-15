@@ -59,19 +59,19 @@ def user_logout(request):
     else:
         return JsonResponse({'Error': "Método no permitido"}, status=405)
     
-def user(request):
+def user(request,id):
     try:
         if request.method != 'GET':
-            user_id = request.GET['id']
-            user = User.objects.get(id=user_id)
-
-            if user is None:
-                return JsonResponse({'Error': "Usario no encontrado"}, status=404)
+            return JsonResponse({'Error': "Metodo no permitido"}, status=405)
+        try:
+            user = User.objects.get(id=id)
+        except User.DoesNotExist:
+            return JsonResponse({'Error': "Usuario no encontrado"}, status=404)
         
-            return JsonResponse({'id': user.id, 'username': user.username, 'email': user.email})
+        return JsonResponse({'id': user.id, 'username': user.username, 'email': user.email})
     except Exception as e:
-            print("Error "+e)
-            return JsonResponse({'Error': "error del servicio"}, status=400)
+        print("Error "+e)
+        return JsonResponse({'Error': "error del servicio"}, status=400)
 
 def users(request):
     try:
@@ -87,20 +87,17 @@ def users(request):
         print("Error "+e)
         return JsonResponse({'Error': "error del servicio"}, status=400)
 
-def deleteUser(request):
+def deleteUser(request,id):
     try:
-        if request.method != 'DELETE        ':
+        if request.method != 'DELETE':
             return JsonResponse({'Error': "Metodo no permitido"}, status=405)
-        user_id = request.GET['id']
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(id=id)
         user.delete()
-
-        if user is None:
-            return JsonResponse({'Error': "Usario no encontrado"}, status=404)
         return JsonResponse('User deleted')
     except Exception as e:
         print("Error "+e)
         return JsonResponse({"Error":"error deñ servicio"}, status=400)
+
 @csrf_exempt
 def user_verification(request):
     if request.method == 'GET':

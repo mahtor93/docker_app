@@ -23,5 +23,7 @@ from api.views import users
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
+    #las rutas tiene que ir con el name este es un ejemplo
     path('', users, name='users'),
+    
 ]

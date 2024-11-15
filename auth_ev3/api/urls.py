@@ -10,7 +10,7 @@ urlpatterns = [
     path('register/', register_user, name='register'),
     path('verify/', user_verification, name='verify'),
 
-    path('user/<int:id>/', user, name='getUserById'),
+    path('users/<int:id>/', user, name='getUserById'),
     path('users/', users, name='getAllUsers'),
-    path('user/delete/<int:id>/', deleteUser, name='deleteUserById'),
+    path('users/delete/<int:id>/', deleteUser, name='deleteUserById'),
 ]

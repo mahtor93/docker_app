@@ -1,2 +1,5 @@
 venv/
 __pychache__
+auth_ev3/auth_ev3/__pycache__/
+auth_ev3/api/__pycache__/
+auth_ev3/api/migrations/__pycache__/
