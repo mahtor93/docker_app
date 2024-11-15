@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 # Create your views here.
-
+@csrf_exempt
 def register_user(request):
     if request.method == 'POST':
         try:
@@ -101,4 +101,18 @@ def deleteUser(request):
     except Exception as e:
         print("Error "+e)
         return JsonResponse({"Error":"error deñ servicio"}, status=400)
+@csrf_exempt
+def user_verification(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            return JsonResponse({
+                'status': 'success',
+                'username': request.user.username,
+                'email': request.user.email,
+            })
+        else:
+            return JsonResponse({'status': 'error', 'message': 'No autenticado'}, status=401)
+    else:
+        return JsonResponse({'Error': "Método no permitido"}, status=405)
+
     
