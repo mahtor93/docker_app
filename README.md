@@ -29,6 +29,10 @@ Este proyecto es una aplicación Docker que proporciona una configuración bási
 
 La aplicación estará disponible en `http://localhost:puerto` (reemplaza `puerto` con el puerto configurado en tu `docker-compose.yml`).
 
+Para conseguir la ip que está sirviendo la base de datos y poder conectar a PgAdmin:
+sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nombre_del_contenedor
+
+
 ## Estructura del Proyecto
 
 - `Dockerfile`: Define la imagen de Docker para la aplicación.
