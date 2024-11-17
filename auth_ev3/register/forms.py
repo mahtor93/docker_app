@@ -1,20 +1,20 @@
 from django import forms
 
 class RegistroForm(forms.Form):
-    nombre = forms.CharField(label='Nombre', max_length=100)
-    correo = forms.EmailField(label='Correo')
-    psw = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
-    psw2 = forms.CharField(label='Repetir Contraseña', widget=forms.PasswordInput)
+    username = forms.CharField(label='Nombre de usuario', max_length=100)
+    email = forms.EmailField(label='Correo electrónico', max_length=255)
+    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Repetir contraseña', widget=forms.PasswordInput)
 
-    def clean_psw2(self):
-        psw = self.cleaned_data.get('psw')
-        psw2 = self.cleaned_data.get('psw2')
+    def clean_password2(self):
+        password = self.cleaned_data.get('password')
+        password2 = self.cleaned_data.get('password2')
         
-        if psw and psw2 and psw != psw2:
-            self.add_error('psw2','Las contraseñas no coinciden.')
-            
-        return psw2
-    
+        if password and password2 and password != password2:
+            self.add_error('password2', 'Las contraseñas no coinciden.')
+        
+        return password2
+
 class LoginForm(forms.Form):
-    correo = forms.EmailField(label='Correo')
-    psw = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
+    email = forms.EmailField(label='Correo electrónico', max_length=255)
+    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput)

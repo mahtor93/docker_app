@@ -139,41 +139,71 @@
             Registro
         </h1>
         {% load custom_filters %}
-        <form action="/register/" method="POST">
+        <form id="registerForm" action="/api/register/" method="POST">
             {% csrf_token %}
             <div class="form-register">
-
-                <div class="form-item">
-                    <label for="id_nombre">Nombre</label>
-                    {{ form.nombre|add_class:"neumorph-input"}}
+                <div>
+                    <label for="id_username">Nombre de usuario</label>
+                    <input type="text" name="username" id="id_username" class="neumorph-input" value="{{ form.username.value }}">
                 </div>
                 <div>
-                    <label for="id_correo">Correo</label>
-                    {{ form.correo|add_class:"neumorph-input"}}
+                    <label for="id_email">Correo</label>
+                    <input type="email" name="email" id="id_email" class="neumorph-input" value="{{ form.email.value }}">
                 </div>
                 <div>
-                    <label for="id_psw">Contraseña</label>
-                    {{ form.psw|add_class:"neumorph-input"}}
+                    <label for="id_password">Contraseña</label>
+                    <input type="password" name="password" id="id_password" class="neumorph-input" value="{{ form.password.value }}">
                 </div>
                 <div>
-                    <label for="id_psw2">Repetir Contraseña</label>
-                    {{ form.psw2|add_class:"neumorph-input"}}
-                    <div class="errorList">
-                        {{ form.psw2.errors}}
-                    </div>
-                    
+                    <label for="id_password2">Repetir Contraseña</label>
+                    <input type="password" name="password2" id="id_password2" class="neumorph-input" value="{{ form.password2.value }}">
                 </div>
-
-                <button class="button neumorph">
-                    Registrarse
-                </button>
+                <button class="button neumorph" type="submit">Registrarse</button>
             </div>
-
         </form>
+        
         <div class='post-button'>
             <p>¿Ya tienes una cuenta? <a href="{% url 'home' %}">Iniciar Sesión</a></p>
         </div>
     </div>
+
+    <script>
+async function submitRegisterForm(event) {
+    event.preventDefault(); // Prevenir el envío predeterminado del formulario
+    const form = document.getElementById('registerForm');
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    console.log(data);  // Para depuración
+
+    try {
+        const response = await fetch('/api/register/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')  // Asegúrate de que el token se envíe correctamente
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            window.location.href = '/';  // Redirige al home u otra página.
+        } else {
+            const errorData = await response.json();
+            console.error('Error:', errorData);
+            alert('Registro fallido: ' + JSON.stringify(errorData));
+        }
+    } catch (error) {
+        console.error('Network Error:', error);
+        alert('Error de conexión al registrar.');
+    }
+}
+
+// Asocia el envío del formulario al evento submit
+document.getElementById('registerForm').addEventListener('submit', submitRegisterForm);
+
+    </script>
+
 </body>
 
 </html>

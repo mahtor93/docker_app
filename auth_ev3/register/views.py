@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from .forms import RegistroForm, LoginForm
 
@@ -16,3 +17,7 @@ def home(request):
         #proceso de login
         pass
     return render(request, 'home.html', {'form':form})
+
+@login_required
+def dashboard(request):
+    return render(request, 'dashboard.html')

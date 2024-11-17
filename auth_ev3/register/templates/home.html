@@ -139,27 +139,62 @@
     <div class="wrapper neumorph-out">
         <h2>Iniciar Sesión</h2>
     {% load custom_filters %}
-    <form>
+    <form id="loginForm">
         {% csrf_token %}
-
+    
         <div class="form-register">
             <div>
-                <label for="id_correo">Correo</label>
-                {{ form.correo|add_class:"neumorph-input"}}
+                <label for="id_email">Correo</label>
+                {{ form.email|add_class:"neumorph-input" }}
             </div>
             <div>
-                <label for="id_psw">Contraseña</label>
-                {{ form.psw|add_class:"neumorph-input"}}
+                <label for="id_password">Contraseña</label>
+                {{ form.password|add_class:"neumorph-input" }}
             </div>
             <button class="button neumorph">
                 Iniciar Sesión
             </button>
-
         </div>
     </form>
+    
         <div class='post-button'>
-            <p>Si no tienes una cuenta <a href="{% url 'register' %}">Registrate</a></p>
+            <p>Si no tienes una cuenta <a href="{% url 'form_registro' %}">Registrate</a></p>
         </div>
     </div>
 </body>
+
+<script>
+    async function submitLoginForm(event) {
+        event.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
+        const form = document.getElementById('loginForm');
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        console.log(data);  // Para asegurarse de que los datos se estén enviando correctamente
+
+        try {
+            const response = await fetch('/api/login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                window.location.href = '/dashboard'; // Redirige a dashboard
+            } else {
+                const errorData = await response.json();
+                console.error('Error:', errorData);
+                alert('Error de inicio de sesión: ' + JSON.stringify(errorData));
+            }
+        } catch (error) {
+            console.error('Error de red:', error);
+            alert('Error de conexión al iniciar sesión.');
+        }
+    }
+
+    // Asignar el evento al formulario
+    document.getElementById('loginForm').addEventListener('submit', submitLoginForm);
+</script>
 </html>
