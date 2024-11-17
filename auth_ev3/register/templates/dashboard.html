@@ -9,6 +9,7 @@
       href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oxanium:wght@200..800&display=swap"
       rel="stylesheet"
     />
+
     <title>Dashboard</title>
   </head>
   <style>
@@ -79,37 +80,38 @@
     }
     .button {
       align-self: center;
-      width: 140px;
+      width: 200px;
       height: 54px;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin: 16px;
+      margin: 32px;
       border: 1px #cecece solid;
       font-size: 16px;
       font-family: "Montserrat", serif;
       color: rgb(75, 75, 75);
     }
+    .button .del {
+      border: 1px red solid;
+    }
     #usersTable {
-      width: 90%;
-      margin:20px; /* Agregar margen superior para más espacio */
-      border-radius: 16px;
+      width: 75%;
+      margin-bottom: 16px;
     }
 
     #usersTable th,
     #usersTable td {
       padding: 12px; /* Espacio dentro de las celdas */
-      text-align: left; /* Alineación a la izquierda */
+      text-align: center; /* Alineación a la izquierda */
       border: 1px solid #ddd; /* Bordes finos y claros para las celdas */
       background-color: #f9f9f9; /* Fondo de celdas de datos */
     }
 
     #usersTable th {
-      background-color: rgb(75, 75, 75); 
+      background-color: rgb(75, 75, 75);
       color: white; /* Texto blanco en los encabezados */
       text-transform: uppercase; /* Mayúsculas en los encabezados */
       font-weight: bold; /* Negrita en los encabezados */
-      border-radius: 16px;
     }
 
     #usersTable tr:nth-child(even) {
@@ -120,33 +122,46 @@
       background-color: #ddd; /* Efecto hover para filas */
     }
 
-    .container-table {
-        margin: 0 20px 20px 20px;
+    .button-rack {
+      display: flex;
+      flex-direction: row;
     }
   </style>
   <body>
-    <h1>Dashboard</h1>
+    <h1>{{ welcome_message }}</h1>
     <div class="wrapper neumorph-out">
-      <h2>{{ welcome_message }}</h2>
-
-
-      <table id="usersTable" class="container-table">
-        <p>Lista de usuarios registrados</p>
+      <table id="usersTable">
+        <h2>Lista de usuarios registrados</h2>
         <thead>
           <tr>
             <th>ID</th>
             <th>Nombre de Usuario</th>
             <th>Correo Electrónico</th>
+            <th>Eliminar</th>
           </tr>
         </thead>
         <tbody>
           <!-- Aquí se llenará la tabla con los datos de los usuarios -->
         </tbody>
       </table>
+      <div class="button-rack">
+        <form action="/api/logout/" method="POST">
+          <button class="button neumorph" type="submit">Cerrar Sesión</button>
+        </form>
+        <form id="deleteUsersForm" method="POST" action="/api/users/delete/">
+          {% csrf_token %}
+          <input type="hidden" name="userIds" id="userIds" />
+        </form>
 
-      <form action="/api/logout/" method="POST">
-        <button class="button neumorph" type="submit">Salir</button>
-      </form>
+        <button
+          id="deleteSelected"
+          class="button neumorph"
+          style="border: 2px red solid"
+          onclick="deleteSelectedUsers()"
+        >
+          Eliminar Selección
+        </button>
+      </div>
     </div>
     <script>
       // Obtener todos los usuarios a través de la API
@@ -154,15 +169,17 @@
         try {
           const response = await fetch("/api/users/");
           const users = await response.json();
-
+          users.sort((a, b) => a.id - b.id);
           const tableBody = document.querySelector("#usersTable tbody");
           users.forEach((user) => {
             const row = document.createElement("tr");
             row.innerHTML = `
-                    <td>${user.id}</td>
-                    <td>${user.username}</td>
-                    <td>${user.email}</td>
-                `;
+                        
+                        <td>${user.id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td><input type="checkbox" class="userCheckbox" data-id="${user.id}"></td>
+                    `;
             tableBody.appendChild(row);
           });
         } catch (error) {
@@ -172,6 +189,60 @@
 
       // Llamar a la función para obtener los usuarios cuando se cargue la página
       window.onload = getUsers;
+
+      // Función para eliminar los usuarios seleccionados
+      async function deleteSelectedUsers() {
+        const csrfToken = document.querySelector(
+          '[name="csrfmiddlewaretoken"]'
+        ).value;
+
+        const selectedCheckboxes = document.querySelectorAll(
+          ".userCheckbox:checked"
+        );
+        const userIds = Array.from(selectedCheckboxes).map(
+          (checkbox) => checkbox.dataset.id
+        );
+
+        if (userIds.length === 0) {
+          alert("No se ha seleccionado ningún usuario.");
+          return;
+        }
+
+        let allUsersDeleted = true;
+
+        try {
+          for (const userId of userIds) {
+            const response = await fetch(`/api/users/delete/${userId}`, {
+              method: "DELETE",
+              headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/json",
+              },
+            });
+
+            if (response.ok) {
+              alert(`Usuario con ID ${userId} eliminado.`);
+            } else {
+              allUsersDeleted = false;
+              const errorMessage = await response.text(); // Obtener el mensaje de error
+              console.log(
+                `Error al eliminar el usuario con ID ${userId}: ${errorMessage}`
+              );
+              alert(
+                `Error al eliminar el usuario con ID ${userId}: ${errorMessage}`
+              );
+            }
+          }
+          if (allUsersDeleted) {
+            // Redirigir a la página /dashboard/ después de eliminar los usuarios
+            window.location.href = "/dashboard/";
+          } else {
+            console.log("No todos los usuarios fueron eliminados.");
+          }
+        } catch (error) {
+          console.error("Error al eliminar los usuarios:", error);
+        }
+      }
     </script>
   </body>
 </html>

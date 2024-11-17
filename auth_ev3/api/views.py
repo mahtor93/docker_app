@@ -113,7 +113,7 @@ def deleteUser(request, id):
             return JsonResponse({'Error': "Metodo no permitido"}, status=405)
         user = Usuario.objects.get(id=id)  # Cambiar a Usuario
         user.delete()
-        return JsonResponse('User deleted')
+        return JsonResponse({}, status=204)
     except Exception as e:
         print("Error "+str(e))
         return JsonResponse({"Error":"error del servicio"}, status=400)
