@@ -212,7 +212,7 @@
 
         try {
           for (const userId of userIds) {
-            const response = await fetch(`/api/users/delete/${userId}`, {
+            const response = await fetch(`/api/users/${userId}`, {
               method: "DELETE",
               headers: {
                 "X-CSRFToken": csrfToken,
