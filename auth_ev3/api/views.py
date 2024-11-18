@@ -79,14 +79,17 @@ def user_logout(request):
 # Obtener información del usuario
 def user(request, id):
     try:
-        if request.method != 'GET':
+        if request.method != 'GET' && request.method !='delete':
             return JsonResponse({'Error': "Metodo no permitido"}, status=405)
+         if request.method == 'DELETE':
+            user = Usuario.objects.get(id=id)
+            user.delete()
+            return JsonResponse({'Success': "Usuario eliminado"}, status=201)
         try:
-            user = Usuario.objects.get(id=id)  # Cambiar a Usuario
+            user = Usuario.objects.get(id=id)
+            return JsonResponse({'id': user.id, 'username': user.username, 'email': user.email})
         except Usuario.DoesNotExist:
             return JsonResponse({'Error': "Usuario no encontrado"}, status=404)
-        
-        return JsonResponse({'id': user.id, 'username': user.username, 'email': user.email})
     except Exception as e:
         print("Error "+str(e))
         return JsonResponse({'Error': "error del servicio"}, status=400)
@@ -105,18 +108,6 @@ def users(request):
     except Exception as e:
         print("Error "+str(e))
         return JsonResponse({'Error': "error del servicio"}, status=400)
-
-# Eliminar un usuario
-def deleteUser(request, id):
-    try:
-        if request.method != 'DELETE':
-            return JsonResponse({'Error': "Metodo no permitido"}, status=405)
-        user = Usuario.objects.get(id=id)  # Cambiar a Usuario
-        user.delete()
-        return JsonResponse({}, status=204)
-    except Exception as e:
-        print("Error "+str(e))
-        return JsonResponse({"Error":"error del servicio"}, status=400)
 
 # Verificación del estado de autenticación del usuario
 @csrf_exempt
