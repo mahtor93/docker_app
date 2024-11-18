@@ -1,6 +1,5 @@
 from django.urls import path
 from .views import (
-    deleteUser,
     user,
     users,
     user_login,
@@ -16,6 +15,5 @@ urlpatterns = [
     path('verify/', user_verification, name='verify'),
 
     path('users/<int:id>', user, name='getUserById'),
-    path('users/', users, name='getAllUsers'),
-    path('users/delete/<int:id>', deleteUser, name='deleteUserById'),
+    path('users/', users, name='getAllUsers')
 ]
