@@ -79,9 +79,9 @@ def user_logout(request):
 # Obtener información del usuario
 def user(request, id):
     try:
-        if request.method != 'GET' && request.method !='delete':
+        if request.method != 'GET' and request.method !='delete':
             return JsonResponse({'Error': "Metodo no permitido"}, status=405)
-         if request.method == 'DELETE':
+        if request.method == 'DELETE':
             user = Usuario.objects.get(id=id)
             user.delete()
             return JsonResponse({'Success': "Usuario eliminado"}, status=201)
